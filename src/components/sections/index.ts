@@ -1,0 +1,7 @@
+export { Hero } from "@/features/hero"
+export { About } from "@/features/about"
+export { Services } from "@/features/services"
+export { Tools } from "@/features/tools"
+export { Experience } from "@/features/experience"
+export { Projects } from "@/features/projects"
+export { Contact } from "@/features/contact"
