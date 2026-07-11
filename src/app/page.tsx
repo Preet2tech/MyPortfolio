@@ -2,6 +2,7 @@ import { Navbar } from "@/components/layout/Navbar"
 import { Footer } from "@/components/layout/Footer"
 import { WorkspaceCanvas } from "@/features/workspace/components/WorkspaceCanvas"
 import { WorkspaceScrollElements } from "@/features/workspace/components/WorkspaceScrollElements"
+import { WorkspaceLoader } from "@/features/workspace/components/WorkspaceLoader"
 import {
   Hero,
   About,
@@ -15,6 +16,9 @@ import {
 export default function Home() {
   return (
     <>
+      {/* Splash loader overlay */}
+      <WorkspaceLoader />
+
       {/* Infinite fixed canvas grid background & collaborator cursors */}
       <WorkspaceCanvas />
 
