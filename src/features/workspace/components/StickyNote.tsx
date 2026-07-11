@@ -1,9 +1,11 @@
 "use client"
 
 import * as React from "react"
+import { m, useTransform } from "framer-motion"
+import { useWorkspace } from "../providers/workspace-provider"
 import { cn } from "@/lib/utils"
 
-interface StickyNoteProps extends React.HTMLAttributes<HTMLDivElement> {
+interface StickyNoteProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onDrag" | "onDragStart" | "onDragEnd" | "onAnimationStart"> {
   color?: "yellow" | "pink" | "blue" | "green" | "orange"
   text: string
   author?: string
@@ -57,12 +59,17 @@ export function StickyNote({
   className,
   ...props
 }: StickyNoteProps) {
+  const { mouseX, mouseY, isReducedMotion } = useWorkspace()
   const styles = colorMap[color] || colorMap.yellow
 
+  // Map pointer spring values to soft translations (magnetic depth feedback)
+  const transX = useTransform(mouseX, [-0.5, 0.5], [-3, 3])
+  const transY = useTransform(mouseY, [-0.5, 0.5], [-3, 3])
+
   return (
-    <div
+    <m.div
       className={cn(
-        "p-4 border flex flex-col justify-between shadow-[0_4px_12px_rgba(0,0,0,0.06)] rounded-sm pointer-events-none select-none transition-transform z-15",
+        "p-4 border flex flex-col justify-between shadow-[0_4px_12px_rgba(0,0,0,0.06)] rounded-sm select-none z-15 pointer-events-auto cursor-pointer transition-all duration-200 hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)]",
         styles.bg,
         styles.border,
         className
@@ -70,12 +77,26 @@ export function StickyNote({
       style={{
         width,
         height,
-        transform: rotate ? `rotate(${rotate}deg)` : undefined
+        x: isReducedMotion ? 0 : transX,
+        y: isReducedMotion ? 0 : transY
+      }}
+      animate={{
+        rotate: isReducedMotion ? rotate : [rotate, rotate + 1.2, rotate - 1.2, rotate]
+      }}
+      whileHover={isReducedMotion ? {} : {
+        y: -3,
+        rotate: 0,
+        scale: 1.02
+      }}
+      transition={{
+        duration: 12,
+        repeat: Infinity,
+        ease: "easeInOut"
       }}
       aria-hidden="true"
       {...props}
     >
-      <p className={cn("m-0 text-xs font-mono font-medium leading-relaxed leading-normal select-none overflow-hidden", styles.text)}>
+      <p className={cn("m-0 text-xs font-mono font-medium leading-normal select-none overflow-hidden", styles.text)}>
         {text}
       </p>
       
@@ -85,6 +106,6 @@ export function StickyNote({
           <span>{date || "Pin ✓"}</span>
         </div>
       )}
-    </div>
+    </m.div>
   )
 }

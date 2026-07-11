@@ -1,14 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { CollaboratorCursors } from "./CollaboratorCursors"
+import { WorkspacePresenceEngine } from "./WorkspacePresenceEngine"
 
 export function WorkspaceCanvas() {
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden select-none -z-20">
       {/* 1. Infinite Dotted Grid Pattern Background using high-DPI vector SVG */}
       <svg 
-        className="absolute inset-0 w-full h-full text-muted-foreground/20"
+        className="absolute inset-0 w-full h-full opacity-[0.5] dark:opacity-[0.3] text-border"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
       >
@@ -29,8 +29,8 @@ export function WorkspaceCanvas() {
         aria-hidden="true"
       />
       
-      {/* 3. Collaborator mouse cursors */}
-      <CollaboratorCursors />
+      {/* 3. Coordinated Collaborator Presence Layer */}
+      <WorkspacePresenceEngine />
     </div>
   )
 }

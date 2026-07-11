@@ -7,6 +7,8 @@ interface WorkspaceContextProps {
   mouseX: MotionValue<number>
   mouseY: MotionValue<number>
   isReducedMotion: boolean
+  activeHighlightId: string | null
+  setActiveHighlightId: (id: string | null) => void
 }
 
 const WorkspaceContext = React.createContext<WorkspaceContextProps | undefined>(undefined)
@@ -21,6 +23,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const smoothMouseY = useSpring(mouseY, springConfig)
 
   const [isReducedMotion, setIsReducedMotion] = React.useState(false)
+  const [activeHighlightId, setActiveHighlightId] = React.useState<string | null>(null)
 
   React.useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -60,7 +63,9 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       value={{ 
         mouseX: smoothMouseX, 
         mouseY: smoothMouseY, 
-        isReducedMotion 
+        isReducedMotion,
+        activeHighlightId,
+        setActiveHighlightId
       }}
     >
       {children}

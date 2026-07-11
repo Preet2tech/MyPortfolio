@@ -28,10 +28,14 @@ export function CommentBubble({
   className,
   ...props
 }: CommentBubbleProps) {
+  const [isHovered, setIsHovered] = React.useState(false)
+
   return (
     <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        "flex items-start gap-2.5 max-w-[200px] bg-background/80 backdrop-blur-[3px] border border-border/80 rounded-2xl rounded-tl-none p-3 shadow-[0_4px_12px_rgba(0,0,0,0.03)] pointer-events-none select-none opacity-70 z-20",
+        "flex items-start gap-2.5 max-w-[200px] bg-background/80 backdrop-blur-[3px] border border-border/80 rounded-2xl rounded-tl-none p-3 shadow-[0_4px_12px_rgba(0,0,0,0.03)] pointer-events-auto select-none opacity-75 hover:opacity-100 hover:scale-[1.03] hover:shadow-md hover:border-primary/25 transition-all duration-200 cursor-default z-20",
         className
       )}
       aria-hidden="true"
@@ -61,6 +65,12 @@ export function CommentBubble({
         <p className="text-[10.5px] text-muted-foreground leading-snug m-0 font-medium break-words font-sans">
           {text}
         </p>
+
+        {isHovered && (
+          <div className="text-[7px] font-mono text-muted-foreground/50 select-none pt-1 animate-in fade-in duration-200">
+            Just now
+          </div>
+        )}
       </div>
     </div>
   )

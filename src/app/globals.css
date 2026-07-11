@@ -115,3 +115,21 @@
     transition: background-color 0.4s ease, color 0.4s ease;
   }
 }
+
+@keyframes dashFlow {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+.animate-dash-flow {
+  stroke-dasharray: 4, 4;
+  animation: dashFlow 1.5s linear infinite;
+}
+
+.group:hover .connector-line-svg {
+  opacity: 0.9 !important;
+  color: var(--color-primary, currentColor) !important;
+  stroke-dasharray: 4, 4;
+  animation: dashFlow 1.5s linear infinite;
+}

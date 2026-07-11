@@ -14,6 +14,7 @@ import {
   PropertyChip,
   CommentBubble
 } from "@/features/workspace/components"
+import { m } from "framer-motion"
 
 export function Contact() {
   const [hoveredForm, setHoveredForm] = React.useState(false)
@@ -60,32 +61,38 @@ export function Contact() {
     <Section id="contact" className="py-20 pb-28 relative overflow-hidden select-none">
       <Container>
         
-        {/* Section Header */}
-        <div className="flex flex-wrap items-center justify-between gap-6 mb-16 border-b border-border/40 pb-6">
-          <div className="space-y-1">
-            <div className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">
-              Desk: Project Proposals // contact_inbox
+        <m.div
+          initial={{ opacity: 0.85, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-120px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          {/* Section Header */}
+          <div className="flex flex-wrap items-center justify-between gap-6 mb-16 border-b border-border/40 pb-6">
+            <div className="space-y-1">
+              <div className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">
+                Desk: Project Proposals // contact_inbox
+              </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight m-0 text-foreground">
+                Let&apos;s Build <span className="font-light text-muted-foreground">Something Great</span>
+              </h2>
             </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight m-0 text-foreground">
-              Let&apos;s Build <span className="font-light text-muted-foreground">Something Great</span>
-            </h2>
+            <PropertyChip label="Availability" value="Open" variant="success" />
           </div>
-          <PropertyChip label="Availability" value="Open" variant="success" />
-        </div>
 
-        {/* Height measurement guideline */}
-        <MeasurementGuide 
-          type="horizontal" 
-          label="spacing-gap: 48px" 
-          length={170} 
-          className="opacity-30 my-6 pl-4 pointer-events-none select-none" 
-        />
+          {/* Height measurement guideline */}
+          <MeasurementGuide 
+            type="horizontal" 
+            label="spacing-gap: 48px" 
+            length={170} 
+            className="opacity-30 my-6 pl-4 pointer-events-none select-none" 
+          />
 
-        {/* Collaboration Desk Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start relative z-10">
-          
-          {/* Left Column: Availability info, Open For, Socials (col-span-5) */}
-          <div className="lg:col-span-5 space-y-8 relative">
+          {/* Collaboration Desk Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start relative z-10">
+            
+            {/* Left Column: Availability info, Open For, Socials (col-span-5) */}
+            <div className="lg:col-span-5 space-y-8 relative group">
             
             {/* Comment bubble next to timezone availability details */}
             <div className="absolute -left-16 top-12 hidden xl:flex z-20 pointer-events-none select-none">
@@ -152,7 +159,7 @@ export function Contact() {
           </div>
 
           {/* Right Column: Contact Form in WorkspaceFrame & SelectionOutline (col-span-7) */}
-          <div className="lg:col-span-7 relative">
+          <div className="lg:col-span-7 relative group">
             
             {/* Pinned Yellow Sticky Note */}
             <div className="absolute -right-16 -top-24 hidden xl:block z-20 pointer-events-none select-none">
@@ -291,7 +298,7 @@ export function Contact() {
           </div>
 
         </div>
-
+        </m.div>
       </Container>
     </Section>
   )

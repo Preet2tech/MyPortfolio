@@ -22,6 +22,8 @@ import {
   MeasurementGuide,
   PropertyChip
 } from "@/features/workspace/components"
+import { useWorkspace } from "@/features/workspace/providers/workspace-provider"
+import { m } from "framer-motion"
 
 // Icon mapping dictionary
 const iconMap = {
@@ -45,58 +47,67 @@ const toolsMap: Record<string, string[]> = {
 
 export function Services() {
   const [hoveredId, setHoveredId] = React.useState<string | null>(null)
+  const { activeHighlightId } = useWorkspace()
 
   return (
     <Section id="services" className="py-20 relative overflow-hidden select-none">
       <Container>
         
-        {/* Planning Board Header */}
-        <div className="flex flex-wrap items-center justify-between gap-6 mb-16 border-b border-border/40 pb-6">
-          <div className="space-y-1">
-            <div className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">
-              Board: Services Planner // cap_brief
+        <m.div
+          initial={{ opacity: 0.85, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-120px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          {/* Planning Board Header */}
+          <div className="flex flex-wrap items-center justify-between gap-6 mb-16 border-b border-border/40 pb-6">
+            <div className="space-y-1">
+              <div className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">
+                Board: Services Planner // cap_brief
+              </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight m-0 text-foreground">
+                What I Can Help <span className="font-light text-muted-foreground">You With</span>
+              </h2>
             </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight m-0 text-foreground">
-              What I Can Help <span className="font-light text-muted-foreground">You With</span>
-            </h2>
+            <PropertyChip label="Palettes" value="6 Services" variant="info" />
           </div>
-          <PropertyChip label="Palettes" value="6 Services" variant="info" />
-        </div>
 
-        {/* Spacing Guide showing header margin constraint */}
-        <MeasurementGuide 
-          type="horizontal" 
-          label="spacing-y: 64px" 
-          length={220} 
-          className="opacity-4 opacity-30 my-6 pl-4 pointer-events-none select-none" 
-        />
+          {/* Spacing Guide showing header margin constraint */}
+          <MeasurementGuide 
+            type="horizontal" 
+            label="spacing-y: 64px" 
+            length={220} 
+            className="opacity-4 opacity-30 my-6 pl-4 pointer-events-none select-none" 
+          />
 
-        {/* Staggered asymmetrical Services grid layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-10 mt-12 relative z-10">
-          
-          {/* Yellow sticky process note card on left margins */}
-          <div className="absolute -left-20 top-24 hidden xl:block z-20 pointer-events-none select-none">
-            <StickyNote 
-              color="yellow" 
-              text="Creative process: Plan ➔ Design ➔ Refine. Keep it simple and pixel perfect." 
-              author="Preet" 
-              rotate={4}
-              width={130}
-              height={130}
-            />
-            {/* Connector linking sticky note to the first frame */}
-            <ConnectorLine 
-              type="curved" 
-              width={90} 
-              height={35} 
-              className="absolute -right-8 -bottom-6 text-yellow-400 rotate-12" 
-            />
-          </div>
+          {/* Staggered asymmetrical Services grid layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-10 mt-12 relative z-10">
+            
+            {/* Yellow sticky process note card on left margins */}
+            <div className="absolute -left-20 top-24 hidden xl:block z-20 pointer-events-none select-none group">
+              <StickyNote 
+                color="yellow" 
+                text="Creative process: Plan ➔ Design ➔ Refine. Keep it simple and pixel perfect." 
+                author="Preet" 
+                rotate={4}
+                width={130}
+                height={130}
+              />
+              {/* Connector linking sticky note to the first frame */}
+              <ConnectorLine 
+                type="curved" 
+                width={90} 
+                height={35} 
+                className="absolute -right-8 -bottom-6 text-yellow-400 rotate-12" 
+              />
+            </div>
 
           {servicesData.map((service, index) => {
             const Icon = iconMap[service.iconName as keyof typeof iconMap] || Layers
             const tools = toolsMap[service.id] || []
             const isHovered = hoveredId === service.id
+            const isEngineSelected = activeHighlightId === service.id
+            const isSelected = isHovered || isEngineSelected
 
             // Stagger placements dynamically using CSS translate offsets to simulate whiteboard nodes
             const staggerClass = cn(
@@ -120,13 +131,13 @@ export function Services() {
                 {/* Figma selection highlight overlay */}
                 <SelectionOutline
                   label={`Component: Card [${service.title}]`}
-                  isSelected={isHovered}
-                  isHovered={isHovered}
+                  isSelected={isSelected}
+                  isHovered={isSelected}
                   className="h-full"
                 >
                   <WorkspaceFrame
                     title={`Card // 00${index + 1}`}
-                    showBorders={!isHovered}
+                    showBorders={!isSelected}
                     className="p-6 h-full flex flex-col justify-between min-h-[220px] bg-background/50 backdrop-blur-[1px] hover:shadow-xl transition-shadow"
                   >
                     {/* Frame Top Details */}
@@ -173,6 +184,7 @@ export function Services() {
 
         </div>
 
+        </m.div>
       </Container>
     </Section>
   )

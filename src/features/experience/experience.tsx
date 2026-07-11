@@ -15,6 +15,7 @@ import {
   PropertyChip,
   CommentBubble
 } from "@/features/workspace/components"
+import { m } from "framer-motion"
 
 export function Experience() {
   const [hoveredId, setHoveredId] = React.useState<string | null>(null)
@@ -23,29 +24,35 @@ export function Experience() {
     <Section id="experience" className="py-20 relative overflow-hidden select-none">
       <Container>
         
-        {/* Journey Map Header */}
-        <div className="flex flex-wrap items-center justify-between gap-6 mb-16 border-b border-border/40 pb-6">
-          <div className="space-y-1">
-            <div className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">
-              Canvas: Creative Timeline // journey_map
+        <m.div
+          initial={{ opacity: 0.85, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-120px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          {/* Journey Map Header */}
+          <div className="flex flex-wrap items-center justify-between gap-6 mb-16 border-b border-border/40 pb-6">
+            <div className="space-y-1">
+              <div className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">
+                Canvas: Creative Timeline // journey_map
+              </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground m-0">
+                My Design <span className="font-light text-muted-foreground">Journey</span>
+              </h2>
             </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground m-0">
-              My Design <span className="font-light text-muted-foreground">Journey</span>
-            </h2>
+            <PropertyChip label="Milestones" value="6 Blocks" variant="info" />
           </div>
-          <PropertyChip label="Milestones" value="6 Blocks" variant="info" />
-        </div>
 
-        {/* Spacing guideline */}
-        <MeasurementGuide 
-          type="horizontal" 
-          label="spacing-gap: 56px" 
-          length={190} 
-          className="opacity-30 my-6 pl-4 pointer-events-none select-none" 
-        />
+          {/* Spacing guideline */}
+          <MeasurementGuide 
+            type="horizontal" 
+            label="spacing-gap: 56px" 
+            length={190} 
+            className="opacity-30 my-6 pl-4 pointer-events-none select-none" 
+          />
 
-        {/* 2-Column Staggered Whiteboard Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16 items-start mt-12 relative z-10">
+          {/* 2-Column Staggered Whiteboard Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16 items-start mt-12 relative z-10 group">
           
           {/* Visual Connectors drawing pathways between staggered nodes on desktop */}
           <div className="absolute inset-0 pointer-events-none hidden xl:block" aria-hidden="true">
@@ -196,6 +203,7 @@ export function Experience() {
 
         </div>
 
+        </m.div>
       </Container>
     </Section>
   )

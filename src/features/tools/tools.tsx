@@ -24,6 +24,8 @@ import {
   PropertyChip,
   CommentBubble
 } from "@/features/workspace/components"
+import { useWorkspace } from "@/features/workspace/providers/workspace-provider"
+import { m } from "framer-motion"
 
 // Icon mapping dictionary
 const iconMap = {
@@ -41,6 +43,7 @@ const iconMap = {
 
 export function Tools() {
   const [hoveredToolId, setHoveredToolId] = React.useState<string | null>(null)
+  const { activeHighlightId } = useWorkspace()
 
   // Group tools by category
   const designTools = toolsData.filter(t => t.category === "Design")
@@ -51,32 +54,38 @@ export function Tools() {
     <Section id="tools" className="py-20 relative overflow-hidden select-none">
       <Container>
         
-        {/* Section Header */}
-        <div className="flex flex-wrap items-center justify-between gap-6 mb-16 border-b border-border/40 pb-6">
-          <div className="space-y-1">
-            <div className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">
-              Workspace: Designer Desk // tool_chest
+        <m.div
+          initial={{ opacity: 0.85, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-120px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          {/* Section Header */}
+          <div className="flex flex-wrap items-center justify-between gap-6 mb-16 border-b border-border/40 pb-6">
+            <div className="space-y-1">
+              <div className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">
+                Workspace: Designer Desk // tool_chest
+              </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight m-0 text-foreground">
+                Tools I <span className="font-light text-muted-foreground">Work With</span>
+              </h2>
             </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight m-0 text-foreground">
-              Tools I <span className="font-light text-muted-foreground">Work With</span>
-            </h2>
+            <PropertyChip label="Release" value="v1.4" variant="info" />
           </div>
-          <PropertyChip label="Release" value="v1.4" variant="info" />
-        </div>
 
-        {/* Height Measurement spacing guide */}
-        <MeasurementGuide 
-          type="horizontal" 
-          label="offset: 48px" 
-          length={160} 
-          className="opacity-30 my-6 pl-4 pointer-events-none select-none" 
-        />
+          {/* Height Measurement spacing guide */}
+          <MeasurementGuide 
+            type="horizontal" 
+            label="offset: 48px" 
+            length={160} 
+            className="opacity-30 my-6 pl-4 pointer-events-none select-none" 
+          />
 
-        {/* Toolbox categories grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start relative z-10">
-          
-          {/* 1. Design Category Frame (lg:col-span-5) */}
-          <div className="lg:col-span-5 relative">
+          {/* Toolbox categories grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start relative z-10">
+            
+            {/* 1. Design Category Frame (lg:col-span-5) */}
+            <div className="lg:col-span-5 relative group">
             
             {/* Comment bubble next to Figma */}
             <CommentBubble 
@@ -98,7 +107,7 @@ export function Tools() {
             <WorkspaceFrame 
               title="Frame: Design Toolbox // creative_suite" 
               className="p-6 space-y-6"
-              isSelected={hoveredToolId === "figma"}
+              isSelected={hoveredToolId === "figma" || activeHighlightId === "figma"}
             >
               <div className="space-y-1 select-none">
                 <span className="font-mono text-[9px] font-bold text-muted-foreground uppercase tracking-wider">
@@ -113,13 +122,14 @@ export function Tools() {
                 {designTools.map(tool => {
                   const Icon = iconMap[tool.iconName as keyof typeof iconMap] || Layers
                   const isHovered = hoveredToolId === tool.id
+                  const isSelected = isHovered || activeHighlightId === tool.id
                   return (
                     <div
                       key={tool.id}
                       onMouseEnter={() => setHoveredToolId(tool.id)}
                       onMouseLeave={() => setHoveredToolId(null)}
                     >
-                      <SelectionOutline isSelected={isHovered} isHovered={isHovered} label={`Asset: ${tool.name}`}>
+                      <SelectionOutline isSelected={isSelected} isHovered={isSelected} label={`Asset: ${tool.name}`}>
                         <div className="flex items-center justify-between p-3 border border-border/70 rounded bg-background/50 hover:bg-background/80 transition-colors">
                           <div className="flex items-center gap-3">
                             <div className="p-2 rounded bg-primary/5 text-primary">
@@ -141,7 +151,7 @@ export function Tools() {
           </div>
 
           {/* 2. Development Category Frame (lg:col-span-4) */}
-          <div className="lg:col-span-4 relative">
+          <div className="lg:col-span-4 relative group">
             
             {/* Sticky note next to VS Code */}
             <div className="absolute -right-20 -top-20 hidden xl:block z-20 pointer-events-none select-none">
@@ -165,7 +175,7 @@ export function Tools() {
             <WorkspaceFrame 
               title="Frame: Coding Setup // dev_stack" 
               className="p-6 space-y-6"
-              isSelected={hoveredToolId === "vscode"}
+              isSelected={hoveredToolId === "vscode" || activeHighlightId === "vscode"}
             >
               <div className="space-y-1 select-none">
                 <span className="font-mono text-[9px] font-bold text-muted-foreground uppercase tracking-wider">
@@ -180,13 +190,14 @@ export function Tools() {
                 {devTools.map(tool => {
                   const Icon = iconMap[tool.iconName as keyof typeof iconMap] || Layers
                   const isHovered = hoveredToolId === tool.id
+                  const isSelected = isHovered || activeHighlightId === tool.id
                   return (
                     <div
                       key={tool.id}
                       onMouseEnter={() => setHoveredToolId(tool.id)}
                       onMouseLeave={() => setHoveredToolId(null)}
                     >
-                      <SelectionOutline isSelected={isHovered} isHovered={isHovered} label={`Asset: ${tool.name}`}>
+                      <SelectionOutline isSelected={isSelected} isHovered={isSelected} label={`Asset: ${tool.name}`}>
                         <div className="flex items-center justify-between p-3 border border-border/70 rounded bg-background/50 hover:bg-background/80 transition-colors">
                           <div className="flex items-center gap-3">
                             <div className="p-2 rounded bg-primary/5 text-primary">
@@ -212,7 +223,7 @@ export function Tools() {
             <WorkspaceFrame 
               title="Frame: Analytics Sandbox // learning_list" 
               className="p-6 space-y-6"
-              isSelected={hoveredToolId === "python" || hoveredToolId === "sql"}
+              isSelected={hoveredToolId === "python" || hoveredToolId === "sql" || activeHighlightId === "python" || activeHighlightId === "sql"}
             >
               <div className="space-y-1 select-none">
                 <span className="font-mono text-[9px] font-bold text-muted-foreground uppercase tracking-wider">
@@ -227,13 +238,14 @@ export function Tools() {
                 {learningTools.map(tool => {
                   const Icon = iconMap[tool.iconName as keyof typeof iconMap] || Layers
                   const isHovered = hoveredToolId === tool.id
+                  const isSelected = isHovered || activeHighlightId === tool.id
                   return (
                     <div
                       key={tool.id}
                       onMouseEnter={() => setHoveredToolId(tool.id)}
                       onMouseLeave={() => setHoveredToolId(null)}
                     >
-                      <SelectionOutline isSelected={isHovered} isHovered={isHovered} label={`Asset: ${tool.name}`}>
+                      <SelectionOutline isSelected={isSelected} isHovered={isSelected} label={`Asset: ${tool.name}`}>
                         <div className="flex items-center justify-between p-3 border border-border/70 rounded bg-background/50 hover:bg-background/80 transition-colors">
                           <div className="flex items-center gap-3">
                             <div className="p-2 rounded bg-primary/5 text-primary">
@@ -256,6 +268,7 @@ export function Tools() {
 
         </div>
 
+        </m.div>
       </Container>
     </Section>
   )

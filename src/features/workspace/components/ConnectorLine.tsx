@@ -17,7 +17,6 @@ export function ConnectorLine({
   styleType = "dashed",
   width = 120,
   height = 40,
-  color = "currentColor",
   className,
   ...props
 }: ConnectorLineProps) {
@@ -43,7 +42,7 @@ export function ConnectorLine({
       viewBox="0 0 120 40"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("pointer-events-none opacity-40 text-muted-foreground z-10", className)}
+      className={cn("pointer-events-none opacity-40 text-muted-foreground z-10 transition-all duration-300 connector-line-svg", className)}
       aria-hidden="true"
       {...props}
     >
@@ -57,13 +56,13 @@ export function ConnectorLine({
           markerHeight="6"
           orient="auto-start-reverse"
         >
-          <path d="M 0 1.5 L 7 5 L 0 8.5 z" fill={color} />
+          <path d="M 0 1.5 L 7 5 L 0 8.5 z" fill="currentColor" />
         </marker>
       </defs>
 
       <path
         d={getPath()}
-        stroke={color}
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeDasharray={isDashed ? "4,4" : isDotted ? "1,3" : undefined}
         markerEnd="url(#arrowhead)"

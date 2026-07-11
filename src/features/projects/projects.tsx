@@ -16,6 +16,8 @@ import {
   PropertyChip,
   CommentBubble
 } from "@/features/workspace/components"
+import { useWorkspace } from "@/features/workspace/providers/workspace-provider"
+import { m } from "framer-motion"
 
 // Static review details for projects
 const projectSpecs = {
@@ -29,34 +31,41 @@ const projectSpecs = {
 
 export function Projects() {
   const [hoveredId, setHoveredId] = React.useState<string | null>(null)
+  const { activeHighlightId } = useWorkspace()
 
   return (
     <Section id="projects" className="py-20 relative overflow-hidden select-none">
       <Container>
         
-        {/* Section Header */}
-        <div className="flex flex-wrap items-center justify-between gap-6 mb-16 border-b border-border/40 pb-6">
-          <div className="space-y-1">
-            <div className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">
-              Wall: Selected Work // design_review
+        <m.div
+          initial={{ opacity: 0.85, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-120px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          {/* Section Header */}
+          <div className="flex flex-wrap items-center justify-between gap-6 mb-16 border-b border-border/40 pb-6">
+            <div className="space-y-1">
+              <div className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">
+                Wall: Selected Work // design_review
+              </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight m-0 text-foreground">
+                Selected <span className="font-light text-muted-foreground">Work</span>
+              </h2>
             </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight m-0 text-foreground">
-              Selected <span className="font-light text-muted-foreground">Work</span>
-            </h2>
+            <PropertyChip label="Release" value="Production" variant="success" />
           </div>
-          <PropertyChip label="Release" value="Production" variant="success" />
-        </div>
 
-        {/* Height measurement guideline */}
-        <MeasurementGuide 
-          type="horizontal" 
-          label="spacing-gap: 64px" 
-          length={200} 
-          className="opacity-30 my-6 pl-4 pointer-events-none select-none" 
-        />
+          {/* Height measurement guideline */}
+          <MeasurementGuide 
+            type="horizontal" 
+            label="spacing-gap: 64px" 
+            length={200} 
+            className="opacity-30 my-6 pl-4 pointer-events-none select-none" 
+          />
 
-        {/* Staggered asymmetrical review wall layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-20 gap-x-12 mt-12 relative z-10">
+          {/* Staggered asymmetrical review wall layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-y-20 gap-x-12 mt-12 relative z-10 group">
           
           {/* 1. Comment Bubble next to Horizon Branding (Card 0) */}
           <div className="absolute -left-20 top-20 hidden xl:flex z-20 pointer-events-none select-none">
@@ -121,9 +130,11 @@ export function Projects() {
 
           {projectsData.map((project, index) => {
             const isHovered = hoveredId === project.id
+            const isEngineSelected = activeHighlightId === project.id
+            const isSelected = isHovered || isEngineSelected
             const spec = projectSpecs[project.id as keyof typeof projectSpecs] || { status: "Draft", version: "v1.0", variant: "default" as const }
 
-            // Stagger tilts and vertical shifts dynamically to make cards feel pinned as whiteboard sheets
+            // Stagger tilts and Y offsets
             const staggeredClass = cn(
               index === 0 && "lg:rotate-1 lg:translate-y-2",
               index === 1 && "lg:-rotate-1 lg:translate-y-10",
@@ -143,13 +154,13 @@ export function Projects() {
                 {/* Visual Figma Selection Outlines */}
                 <SelectionOutline
                   label={`Layer: Project Artboard [00${index + 1}]`}
-                  isSelected={isHovered}
-                  isHovered={isHovered}
+                  isSelected={isSelected}
+                  isHovered={isSelected}
                   className="h-full"
                 >
                   <WorkspaceFrame
                     title={`Artboard // ${spec.version}`}
-                    showBorders={!isHovered}
+                    showBorders={!isSelected}
                     className="p-6 h-full flex flex-col justify-between min-h-[380px] bg-background/50 backdrop-blur-[1px] hover:shadow-2xl transition-all duration-200"
                   >
                     
@@ -221,6 +232,7 @@ export function Projects() {
 
         </div>
 
+        </m.div>
       </Container>
     </Section>
   )
