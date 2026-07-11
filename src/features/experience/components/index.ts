@@ -1,5 +1,4 @@
 export * from "./Timeline"
-export * from "./CreativeExperience"
 export * from "./TimelineItem"
 export * from "./TimelineCard"
 export * from "./TimelineMarker"

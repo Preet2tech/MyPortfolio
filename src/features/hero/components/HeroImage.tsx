@@ -26,18 +26,6 @@ export function HeroImage({ className, ...props }: HeroImageProps) {
           Image Placeholder
         </div>
       </div>
-      
-      {/* Future implementation:
-      {src && (
-        <Image 
-          src={src} 
-          alt={alt || "Profile Image"} 
-          fill 
-          className="object-cover"
-          priority
-        />
-      )}
-      */}
     </div>
   )
 }
